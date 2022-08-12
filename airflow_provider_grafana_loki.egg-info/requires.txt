@@ -1,0 +1,6 @@
+apache-airflow>=2.0
+
+[test]
+pytest>=7.0.0
+requests-mock
+pytest-mock
