@@ -1,3 +1,0 @@
-[apache_airflow_provider]
-provider_info = grafana_loki_provider.__init__:get_provider_info
-
