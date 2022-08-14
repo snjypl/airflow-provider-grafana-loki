@@ -60,7 +60,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         return LokiHook(loki_conn_id=remote_conn_id)
 
     def get_extras(self, ti, try_number=None) -> dict[str, Any]:
-
+        """ extra labels for loki """
         return dict(
             run_id=getattr(ti, "run_id", ""),
             try_number=try_number if try_number != None else ti.try_number,
@@ -68,6 +68,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         )
 
     def get_labels(self, ti) -> dict[str, str]:
+        """ get  Loki labels """
 
         return {"dag_id": ti.dag_id, "task_id": ti.task_id}
 
