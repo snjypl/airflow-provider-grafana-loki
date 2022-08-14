@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 name = "airflow-provider-grafana-loki"
 description = "A provider package for pushing and reading airflow task log from Grafana Loki."
 readme = "README.md"
-license = "Apache License 2.0"
+license = "Apache-2.0"
 requires-python = "~=3.7"
 authors = [
     { name = "Snjypl", email = "toepoe.py@gmail.com" },
@@ -41,6 +41,8 @@ Homepage = "http://grafana.com/"
 path = "grafana_loki_provider/__init__.py"
 pattern = '.*?"versions":.*?\["(?P<version>.*?)"]'
 
+[tool.hatch.build.targets.wheel]
+packages= ["/grafana_loki_provider"]
 [tool.hatch.build.targets.sdist]
 include = [
     "/grafana_loki_provider",
