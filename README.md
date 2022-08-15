@@ -55,9 +55,9 @@ Follow the steps below to enable Grafana Loki logging:
 
 ```
 
-#. Make sure a Grafana Loki (Loki) connection hook has been defined in Airflow. The hook should have read and write access to the Grafana Loki Api.
+5. Make sure a Grafana Loki (Loki) connection hook has been defined in Airflow. The hook should have read and write access to the Grafana Loki Api.
 
-#. Update ``$AIRFLOW_HOME/airflow.cfg`` to contain:
+6. Update ``$AIRFLOW_HOME/airflow.cfg`` to contain:
 
 ```
 
@@ -68,5 +68,5 @@ Follow the steps below to enable Grafana Loki logging:
         remote_log_conn_id = <name of the Grafana Loki connection>
 ```
 
-#. Restart the Airflow webserver and scheduler, and trigger (or wait for) a new task execution.
-#. Verify that logs are showing up for newly executed tasks is showing up in Airflow UI. 
+7. Restart the Airflow webserver and scheduler, and trigger (or wait for) a new task execution.
+8. Verify that logs are showing up for newly executed tasks is showing up in Airflow UI. 
