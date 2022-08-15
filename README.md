@@ -23,30 +23,50 @@ this process will fail.
 
 Follow the steps below to enable Grafana Loki logging:
 
-#. Airflow's logging system requires a custom ``.py`` file to be located in the :envvar:`PYTHONPATH`, so that it's importable from Airflow. Start by creating a directory to store the config file, ``$AIRFLOW_HOME/config`` is recommended.
-#. Create empty files called ``$AIRFLOW_HOME/config/log_config.py`` and ``$AIRFLOW_HOME/config/__init__.py``.
-#. Copy the contents of ``airflow/config_templates/airflow_local_settings.py`` into the ``log_config.py`` file created in ``Step 2``.
-#. Customize the following portions of the template:
-
-    .. code-block:: ini
-
-        # wasb buckets should start with "wasb" just to help Airflow select correct handler
-        REMOTE_BASE_LOG_FOLDER = 'wasb://<container_name>@<storage_account>.blob.core.windows.net'
-
-        # Rename DEFAULT_LOGGING_CONFIG to LOGGING CONFIG
-        LOGGING_CONFIG = ...
+1. Airflow's logging system requires a custom ``.py`` file to be located in the :envvar:`PYTHONPATH`, so that it's importable from Airflow. Start by creating a directory to store the config file, ``$AIRFLOW_HOME/config`` is recommended.
+2. Create empty files called ``$AIRFLOW_HOME/config/log_config.py`` and ``$AIRFLOW_HOME/config/__init__.py``.
+3. Copy the contents of ``airflow/config_templates/airflow_local_settings.py`` into the ``log_config.py`` file created in ``Step 2``.
+4. Customize the following portions of the template:
 
 
-#. Make sure a Grafana Loki (Loki) connection hook has been defined in Airflow. The hook should have read and write access to the Grafana Loki Api defined above in ``REMOTE_BASE_LOG_FOLDER``.
+
+```
+     elif REMOTE_BASE_LOG_FOLDER.startswith('loki'):
+        LOKI_HANDLER: Dict[str, Dict[str, Union[str, bool]]] = {
+            'task': {
+                'class': 'grafana_loki_provider.log.loki_task_handler.LokiTaskHandler',
+                'formatter': 'airflow',
+                'name':"airflow_task",
+                'base_log_folder': str(os.path.expanduser(BASE_LOG_FOLDER)),
+                'filename_template': FILENAME_TEMPLATE
+            },
+        }
+
+        DEFAULT_LOGGING_CONFIG['handlers'].update(LOKI_HANDLER)
+    else:
+        raise AirflowException(
+            "Incorrect remote log configuration. Please check the configuration of option 'host' in "
+            "section 'elasticsearch' if you are using Elasticsearch. In the other case, "
+            "'remote_base_log_folder' option in the 'logging' section."
+        )
+
+
+
+
+```
+
+#. Make sure a Grafana Loki (Loki) connection hook has been defined in Airflow. The hook should have read and write access to the Grafana Loki Api.
 
 #. Update ``$AIRFLOW_HOME/airflow.cfg`` to contain:
 
-    .. code-block:: ini
+```
 
         [logging]
         remote_logging = True
-        logging_config_class = log_config.LOGGING_CONFIG
+        remote_base_log_folder = loki
+        logging_config_class= log_config.LOGGING_CONFIG
         remote_log_conn_id = <name of the Grafana Loki connection>
+```
 
 #. Restart the Airflow webserver and scheduler, and trigger (or wait for) a new task execution.
 #. Verify that logs are showing up for newly executed tasks is showing up in Airflow UI. 
