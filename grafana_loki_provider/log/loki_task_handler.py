@@ -46,8 +46,8 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         self.closed = False
         self.upload_on_close = True
         self.enable_gzip = enable_gzip
-        self.labels: dict[str, str] = {}
-        self.extras: dict[str, Any] = {}
+        self.labels: Dict[str, str] = {}
+        self.extras: Dict[str, Any] = {}
 
     @cached_property
     def hook(self) -> LokiHook:
@@ -59,16 +59,15 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
 
         return LokiHook(loki_conn_id=remote_conn_id)
 
-    def get_extras(self, ti, try_number=None) -> dict[str, Any]:
-        """ extra labels for loki """
+    def get_extras(self, ti, try_number=None) -> Dict[str, Any]:
+
         return dict(
             run_id=getattr(ti, "run_id", ""),
             try_number=try_number if try_number != None else ti.try_number,
             map_index=getattr(ti, "map_index", ""),
         )
 
-    def get_labels(self, ti) -> dict[str, str]:
-        """ get  Loki labels """
+    def get_labels(self, ti) -> Dict[str, str]:
 
         return {"dag_id": ti.dag_id, "task_id": ti.task_id}
 
@@ -126,6 +125,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
             "direction": "forward",
         }
 
+        self.log.info(f"loki log query params {params}")
         data = self.hook.query_range(params)
 
         lines = []
@@ -172,7 +172,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         lines = []
         for line in log:
             ts = str(int(time.time() * ns))
-            line = {"line": line} | extras
+            line = {**{"line": line}, ** extras }
             line = json.dumps(line)
             lines.append([ts, line])
 
