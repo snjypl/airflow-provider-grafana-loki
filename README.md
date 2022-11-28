@@ -64,7 +64,7 @@ Follow the steps below to enable Grafana Loki logging:
         [logging]
         remote_logging = True
         remote_base_log_folder = loki
-        logging_config_class= log_config.LOGGING_CONFIG
+        logging_config_class= log_config.DEFAULT_LOGGING_CONFIG
         remote_log_conn_id = <name of the Grafana Loki connection>
 ```
 
