@@ -70,3 +70,21 @@ Follow the steps below to enable Grafana Loki logging:
 
 7. Restart the Airflow webserver and scheduler, and trigger (or wait for) a new task execution.
 8. Verify that logs are showing up for newly executed tasks is showing up in Airflow UI. 
+
+
+in case you are using gevent worker class, you might face `RecursionError: maximum recursion depth exceeded` error while reading logs from Loki. 
+please refer following issue for more info:[gevent/gevent/#1016]() [apache/airflow/#9118](https://github.com/apache/airflow/issues/9118)
+
+current workaround is to add monkey patching at the top of the airflow log settings file. in this above case, ``$AIRFLOW_HOME/config/log_config.py``
+
+eg:
+```
+""Airflow logging settings."""
+from __future__ import annotations
+
+import gevent.monkey
+gevent.monkey.patch_all()
+import os
+```
+
+
