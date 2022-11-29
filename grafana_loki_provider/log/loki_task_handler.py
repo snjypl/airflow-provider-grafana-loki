@@ -126,12 +126,22 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         }
 
         self.log.info(f"loki log query params {params}")
-        data = self.hook.query_range(params)
+        try:
+            data = self.hook.query_range(params)
+        except Exception as e:
+            self.log.info('exception fetching from loki')
+            self.log.exception(e)
+            raise
+        self.log.info('got response from loki')
 
         lines = []
 
+        self.log.info(data)
         if "data" in data and "result" in data["data"]:
             for i in data["data"]["result"]:
+
+                self.log.info(i['values'])
+
                 for v in i["values"]:
                     try:
                         msg = v[1]
@@ -141,7 +151,9 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
                         self.log.exception(e)
                         pass
 
+        self.log.info(f"lines count {len(lines)}")
         log_lines = "".join(lines)
+
 
         return log_lines, {"end_of_log": True}
 
