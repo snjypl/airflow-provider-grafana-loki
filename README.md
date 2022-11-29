@@ -1,5 +1,4 @@
-<b> This is in  development stage, it works for my use case, and has been running without any major issues in my environment. that said, i STRONGLY discourage using it in PRODUCTION</b>
-<b>i would greately appreciate if you could try it out and share your feedback, issues. will try my best to address your issues. </b>
+
 
 <p align="center">
   <a href="https://www.airflow.apache.org">
@@ -30,8 +29,6 @@ Follow the steps below to enable Grafana Loki logging:
 2. Create empty files called ``$AIRFLOW_HOME/config/log_config.py`` and ``$AIRFLOW_HOME/config/__init__.py``.
 3. Copy the contents of ``airflow/config_templates/airflow_local_settings.py`` into the ``log_config.py`` file created in ``Step 2``.
 4. Customize the following portions of the template:
-
-
 
 ```
      elif REMOTE_BASE_LOG_FOLDER.startswith('loki'):
@@ -91,3 +88,8 @@ import os
 ```
 
 
+----
+
+<h3> Note: The provider is in active  development stage. All sorts of feedback, and bug reports are welcome. I will try to addresss and resolve all issues to the best of my ability </h3> 
+<h3>Incase of any issue or you need any help, please feel free to open an issue. </h3>
+<h3>Your contribution to the projects is highly appreciated and welcome.</h3>
