@@ -16,7 +16,13 @@
 
 This package provides Hook and LogHandler that integrates with Grafana Loki. LokiTaskLogHandler is a python log handler that handles and reads task instance logs. It extends airflow FileTaskHandler and uploads to and reads from Grafana Loki.
 
-Writing logs to Grafana Loki
+Installation
+----------------------
+Install using `pip` 
+
+`pip install airflow-provider-grafana-loki` 
+
+Configuration Airflow to write logs to Grafana Loki
 ----------------------------------
 
 Airflow can be configured to read and write task logs in Grafana Loki. It uses an existing
