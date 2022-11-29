@@ -1,3 +1,6 @@
+<b> This is in  development stage, it works for my use case, and has been running without any major issues in my environment. that said, i STRONGLY discourage using it in PRODUCTION</b>
+<b>i would greately appreciate if you could try it out and share your feedback, issues. will try my best to address your issues. </b>
+
 <p align="center">
   <a href="https://www.airflow.apache.org">
     <img alt="Airflow" src="https://cwiki.apache.org/confluence/download/attachments/145723561/airflow_transparent.png?api=v2" width="60" />
