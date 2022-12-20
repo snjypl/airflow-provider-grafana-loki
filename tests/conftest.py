@@ -12,7 +12,7 @@ def session():
 @pytest.fixture(scope='function')
 def loki_conn_details():
 
-    return  dict(conn_type ="http",
+    return  dict(conn_type ="grafana_loki",
     host="https://test.example.com",
     login="loki_username",
     password="loki_password",

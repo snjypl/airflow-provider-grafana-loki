@@ -1,5 +1,4 @@
 """Loki logging handler for tasks"""
-from functools import cached_property
 import time
 from typing import Any, Dict, Optional, Tuple, List
 import typing
@@ -18,6 +17,7 @@ from datetime import timedelta
 from airflow.utils.log.file_task_handler import FileTaskHandler
 from airflow.utils.log.logging_mixin import LoggingMixin
 from grafana_loki_provider.hooks.loki import LokiHook
+from airflow.compat.functools import cached_property
 from airflow.configuration import conf
 import os
 
