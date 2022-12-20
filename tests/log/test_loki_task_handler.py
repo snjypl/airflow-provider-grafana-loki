@@ -1,4 +1,4 @@
-from grafana_loki_provider.log.loki_task_handler import LokiAirflowTaskHandler
+from grafana_loki_provider.log.loki_task_handler import LokiTaskHandler
 from grafana_loki_provider.hooks.loki import LokiHook
 import pytest
 from airflow.models import DAG, DagRun, TaskInstance
@@ -67,7 +67,7 @@ class TestLokiHandler:
         log_path.mkdir()
         self.log_base_path = log_path
 
-        self.handler = LokiAirflowTaskHandler(
+        self.handler = LokiTaskHandler(
             base_log_folder=str(log_path),
             name="test_handler",
             enable_gzip=True,
