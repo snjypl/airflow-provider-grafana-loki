@@ -116,7 +116,12 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         query = self._get_task_query(ti, try_number, metadata)
 
         start = ti.start_date - timedelta(days=15)
-        end = ti.end_date + timedelta(hours=1)
+        #if the task is running or queued, the task will not have end_date, in that
+        # case, we will use a resonable internal of 5 days
+
+        end_date = ti.end_date  or ti.start_date + timedelta(days=5)
+
+        end = end_date + timedelta(hours=1)
 
         params = {
             "query": query,
@@ -141,9 +146,12 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
                         self.log.exception(e)
                         pass
 
-        log_lines = "".join(lines)
+        if  lines:
+            log_lines = "".join(lines)
+            return log_lines, {"end_of_log": True}
+        else:
+            return super()._read(ti, try_number, metadata)
 
-        return log_lines, {"end_of_log": True}
 
     def close(self):
         """Close and upload local log file to remote storage Loki."""
