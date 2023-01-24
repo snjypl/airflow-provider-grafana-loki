@@ -8,5 +8,5 @@ def get_provider_info():
         "connection-types": [
             {"hook-class-name": "grafana_loki_provider.hooks.loki.LokiHook", "connection-type": "grafana_loki"}
         ],
-        "versions": ["0.0.1a2"] # Required
+        "versions": ["0.0.1a3"] # Required
     }
