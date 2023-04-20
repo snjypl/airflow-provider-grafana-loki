@@ -127,6 +127,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
             "query": query,
             "start": start.isoformat(),
             "end": end.isoformat(),
+            "limit":5000,
             "direction": "forward",
         }
 
