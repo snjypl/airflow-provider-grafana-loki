@@ -38,6 +38,9 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         name,
         filename_template: Optional[str] = None,
         enable_gzip=True,
+        start_date_offset:timedelta=timedelta(days=15),
+        end_date_offset:timedelta=timedelta(days=15),
+        log_limit: int = 5000
     ):
         super().__init__(base_log_folder, filename_template)
         self.name: str = name
@@ -48,6 +51,9 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         self.enable_gzip = enable_gzip
         self.labels: Dict[str, str] = {}
         self.extras: Dict[str, Any] = {}
+        self.start_date_offset = start_date_offset
+        self.end_date_offset = end_date_offset
+        self.log_limit = log_limit
 
     @cached_property
     def hook(self) -> LokiHook:
@@ -115,11 +121,11 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
 
         query = self._get_task_query(ti, try_number, metadata)
 
-        start = ti.start_date - timedelta(days=15)
+        start = ti.start_date - self.start_date_offset
         #if the task is running or queued, the task will not have end_date, in that
         # case, we will use a resonable internal of 5 days
 
-        end_date = ti.end_date  or ti.start_date + timedelta(days=5)
+        end_date = ti.end_date  or ti.start_date + self.end_date_offset
 
         end = end_date + timedelta(hours=1)
 
@@ -127,7 +133,7 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
             "query": query,
             "start": start.isoformat(),
             "end": end.isoformat(),
-            "limit":5000,
+            "limit":self.log_limit,
             "direction": "forward",
         }
 
@@ -135,6 +141,8 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
         data = self.hook.query_range(params)
 
         lines = []
+
+        self.log.info(data)
 
         if "data" in data and "result" in data["data"]:
             for i in data["data"]["result"]:
