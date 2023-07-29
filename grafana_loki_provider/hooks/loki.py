@@ -43,12 +43,18 @@ class LokiHook(HttpHook):
         return response
 
     def test_connection(self):
-        v1_status_endpoint = self.v1_status_endpoint
-        self.method = "GET"
-        response = self.run(v1_status_endpoint)
-        response.raise_for_status()
+        try:
+            v1_status_endpoint = self.v1_status_endpoint
+            self.method = "GET"
+            response = self.run(v1_status_endpoint)
+            response.raise_for_status()
 
-        v1_label_endpoint = self.v1_base_endpoint.format(method="labels")
-        self.method = "GET"
-        response = self.run(v1_label_endpoint)
-        return response.raise_for_status()
+            v1_label_endpoint = self.v1_base_endpoint.format(method="labels")
+            self.method = "GET"
+            response = self.run(v1_label_endpoint)
+            response.raise_for_status()
+        except Exception as e:
+            return False, str(e)
+        else:
+            return True, "Connection tested succesfully"
+
