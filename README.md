@@ -1,4 +1,4 @@
-
+[Join Slack Community](https://airflow-grafana-loki.slack.com/)
 
 <p align="center">
   <a href="https://www.airflow.apache.org">
