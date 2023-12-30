@@ -199,4 +199,8 @@ class LokiTaskHandler(FileTaskHandler, LoggingMixin):
             payload = gzip.compress(json.dumps(payload).encode("utf-8"))
             headers["Content-Encoding"] = "gzip"
 
-        self.hook.push_log(payload=payload, headers=headers)
+        try:
+            self.hook.push_log(payload=payload, headers=headers)
+        except Exception as exception:
+            import traceback
+            logging.getLogger('airflow.task').error(f'error curred while pushing logs to loki {exception}')
