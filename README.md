@@ -1,3 +1,7 @@
+> [!WARNING]
+> **This project is not actively maintained.**
+> Issues and pull requests may not receive a timely
+
 [Join Slack Community](https://airflow-grafana-loki.slack.com/)
 
 <p align="center">
